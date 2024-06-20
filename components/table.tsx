@@ -16,8 +16,12 @@ interface Product {
   price: string;
   quantity: string;
   image: string;
-  style: string;
 }
+interface IProduct {
+  id: number;
+  styles: string[];
+}
+type IProps = IProduct & Product;
 type ProductKeys = keyof Product;
 const columns = [
   { uid: "image", name: "Image" },
@@ -33,24 +37,24 @@ const data = [
     name: "T-Shirt",
     price: "$10",
     quantity: "3",
-    image: "https://i.imgur.com/0uQwKkC.png",
-    style: "red",
+    image: "/images/t-shirt.jpg",
+    styles: ["Red", "Blue", "Green"],
   },
   {
     id: 2,
     name: "Shoes",
     price: "$3",
     quantity: "4",
-    image: "https://i.imgur.com/0uQwKkC.png",
-    style: "Brown",
+    image: "/images/shoes.webp",
+    style: ["Brown", "Black", "White"],
   },
   {
     id: 3,
-    name: "Laptop",
+    name: "Baseball Hat",
     price: "$5",
     quantity: "5",
-    image: "https://i.imgur.com/0uQwKkC.png",
-    style: "black",
+    image: "/images/baseball-hat.jpg",
+    style: ["Black", "White", "Red"],
   },
 ];
 const statusColorMap = {
@@ -61,7 +65,7 @@ const statusColorMap = {
 
 export default function CheckoutTable() {
   const renderCell = React.useCallback(
-    (product: Product, columnKey: ProductKeys) => {
+    (product: IProps, columnKey: ProductKeys) => {
       const cellValue = product[columnKey];
 
       switch (columnKey) {
