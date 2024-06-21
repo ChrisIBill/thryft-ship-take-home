@@ -1,9 +1,5 @@
-"use client";
-import { useRouter } from "next/navigation";
-export default function Confirmation() {
-  const router = useRouter();
+import { redirect } from "next/navigation";
 
-  router.push("/shipping/form");
-
-  return <div>Confirmation</div>;
+export default function DefaultConfirmationModal() {
+  redirect("/shipping/form");
 }
