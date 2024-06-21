@@ -1,8 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@nextui-org/button";
-import Link from "next/link";
 
 import { ShippingFormInput } from "./inputs";
 
@@ -16,7 +15,6 @@ import {
 export default function ShippingForm() {
   const router = useRouter();
 
-  router.prefetch("/shipping/confirmation");
   const {
     instagram,
     product,
@@ -82,6 +80,10 @@ export default function ShippingForm() {
     else router.push("/shipping/confirmation");
     // window.history.pushState(null, "", "/shipping/confirmation");
   };
+
+  useEffect(() => {
+    router.prefetch("/shipping/confirmation");
+  }, []);
 
   return (
     <form action={handleSubmit} onSubmit={handleSubmit}>

@@ -10,6 +10,15 @@ import {
 } from "@nextui-org/table";
 import React from "react";
 
+interface Product {
+  [key: string]: string;
+  name: string;
+  price: string;
+  quantity: string;
+  image: string;
+  style: string;
+}
+type ProductKeys = keyof Product;
 const columns = [
   { uid: "image", name: "Image" },
   { uid: "name", name: "Name" },
@@ -51,37 +60,38 @@ const statusColorMap = {
 };
 
 export default function CheckoutTable() {
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback(
+    (product: Product, columnKey: ProductKeys) => {
+      const cellValue = product[columnKey];
 
-    switch (columnKey) {
-      case "image":
-        return <img alt="product" className="w-10 h-10" src={cellValue} />;
-      case "name":
-        return <p>{cellValue}</p>;
-      case "price":
-        return <p className="text-bold text-sm capitalize">{cellValue}</p>;
-      case "status":
-        return;
-      case "quantity":
-        return (
-          <Input
-            className="w-20"
-            // classNames={{
-            //   input: "[&>div]:bg-[#565BD7] [&>div]:text-white",
-            // }}
-            // label="Quantity"
-            // labelPlacement="outside"
-            color="default"
-            defaultValue={cellValue}
-            size="sm"
-            type="number"
-          />
-        );
-      default:
-        return cellValue;
-    }
-  }, []);
+      switch (columnKey) {
+        case "image":
+          return <img alt="product" className="w-10 h-10" src={cellValue} />;
+        case "name":
+          return <p>{cellValue}</p>;
+        case "price":
+          return <p className="text-bold text-sm capitalize">{cellValue}</p>;
+        case "quantity":
+          return (
+            <Input
+              className="w-20"
+              // classNames={{
+              //   input: "[&>div]:bg-[#565BD7] [&>div]:text-white",
+              // }}
+              // label="Quantity"
+              // labelPlacement="outside"
+              color="default"
+              defaultValue={cellValue}
+              size="sm"
+              type="number"
+            />
+          );
+        default:
+          return cellValue;
+      }
+    },
+    [],
+  );
 
   return (
     <Table aria-label="Example table with custom cells">
@@ -99,6 +109,7 @@ export default function CheckoutTable() {
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
+              // @ts-ignore
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}
           </TableRow>
