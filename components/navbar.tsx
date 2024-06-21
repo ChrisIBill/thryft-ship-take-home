@@ -26,7 +26,7 @@ export const Navbar = () => {
           </NextLink>
         </div>
         <div className="gap-[64px] basis-1/3" />
-        <div className="gap-[64px] basis-1/3">
+        <div className="gap-[64px] flex basis-1/3 justify-end items-center">
           <ThemeSwitch />
         </div>
       </header>
