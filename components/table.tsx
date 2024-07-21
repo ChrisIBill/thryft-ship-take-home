@@ -1,4 +1,5 @@
 "use client";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { Input } from "@nextui-org/input";
 import {
   Table,
@@ -10,25 +11,22 @@ import {
 } from "@nextui-org/table";
 import React from "react";
 
-interface Product {
-  [key: string]: string;
+interface IProduct {
+  [key: string]: string | number | string[];
   name: string;
   price: string;
   quantity: string;
   image: string;
-}
-interface IProduct {
   id: number;
   styles: string[];
 }
-type IProps = IProduct & Product;
-type ProductKeys = keyof Product;
+type ProductKeys = keyof IProduct;
 const columns = [
   { uid: "image", name: "Image" },
   { uid: "name", name: "Name" },
   { uid: "price", name: "Price" },
   { uid: "quantity", name: "Quantity" },
-  { uid: "style", name: "Style" },
+  { uid: "styles", name: "Style" },
 ];
 
 const data = [
@@ -46,7 +44,7 @@ const data = [
     price: "$3",
     quantity: "4",
     image: "/images/shoes.webp",
-    style: ["Brown", "Black", "White"],
+    styles: ["Brown", "Black", "White"],
   },
   {
     id: 3,
@@ -54,7 +52,7 @@ const data = [
     price: "$5",
     quantity: "5",
     image: "/images/baseball-hat.jpg",
-    style: ["Black", "White", "Red"],
+    styles: ["Black", "White", "Red"],
   },
 ];
 const statusColorMap = {
@@ -65,12 +63,18 @@ const statusColorMap = {
 
 export default function CheckoutTable() {
   const renderCell = React.useCallback(
-    (product: IProps, columnKey: ProductKeys) => {
+    (product: IProduct, columnKey: ProductKeys) => {
       const cellValue = product[columnKey];
 
       switch (columnKey) {
         case "image":
-          return <img alt="product" className="w-10 h-10" src={cellValue} />;
+          return (
+            <img
+              alt="product"
+              className="w-10 h-10"
+              src={cellValue as string}
+            />
+          );
         case "name":
           return <p>{cellValue}</p>;
         case "price":
@@ -85,10 +89,24 @@ export default function CheckoutTable() {
               // label="Quantity"
               // labelPlacement="outside"
               color="default"
-              defaultValue={cellValue}
+              defaultValue={cellValue as string}
               size="sm"
               type="number"
             />
+          );
+        case "styles":
+          if (typeof cellValue === "string" || typeof cellValue === "number") {
+            return <p>{cellValue}</p>;
+          }
+
+          return (
+            <Autocomplete>
+              {cellValue.map((item, index) => (
+                <AutocompleteItem key={item + index} value={item}>
+                  {item}
+                </AutocompleteItem>
+              ))}
+            </Autocomplete>
           );
         default:
           return cellValue;
